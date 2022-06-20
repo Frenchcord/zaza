@@ -4,3 +4,4 @@ from .context import Context
 from .guild import Guild
 from .role import Role
 from .stickers import Stickers
+from .channels import txt_Channel
