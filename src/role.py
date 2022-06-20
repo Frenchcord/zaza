@@ -5,3 +5,6 @@ class Role:
     self.color = self.couleur = info['color']
     self.pin: bool = info['hoist']
     self.position: int = info['position']
+    self.permissions: str = info['permissions']
+    self.managed: bool = info['managed']
+    self.mentionable: bool = info['mentionable']
