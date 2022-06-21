@@ -1,9 +1,8 @@
-import requests; from json import loads; from package import errors; from token import get_token; import pfp; from guild import Guild
-from role import Role; from emojis import Emoji
-url = 'https://discord.com/api/v10'
-from channels import txt_Channel
-from stickers import Stickers
+import requests; from json import loads; from ..package import errors; from ..token import get_token
+from .. import pfp
+url: str = 'https://discord.com/api/v10'
 def get_salon(id: int = None, serveur_id: int = None, nom: str = None):
+  from .channels import txt_Channel
   if id is not None:
     r = requests.get(f'{url}/channels/{id}', headers={'authorization': 'Bot ' + get_token()})
     errors.status(r.status_code)
@@ -21,6 +20,7 @@ def get_salon(id: int = None, serveur_id: int = None, nom: str = None):
     raise ValueError('Tu dois avoir au moins un id du salon ou un serveur id et un nom')
 
 def get_channel(id: int = None, serveur_id: int = None, nom: str = None):
+  from .channels import txt_Channel
   if id is not None:
     r = requests.get(f'{url}/channels/{id}', headers={'authorization': 'Bot ' + get_token()})
     errors.status(r.status_code)
@@ -38,11 +38,13 @@ def get_channel(id: int = None, serveur_id: int = None, nom: str = None):
     raise ValueError('Tu dois avoir au moins un id du salon ou un serveur id et un nom')
 
 def get_guild(guild_id):
+  from .guild import Guild
   r = requests.get(f'{url}/guilds/{guild_id}', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   return Guild(loads(r.content.decode('utf-8')))
 
 def get_serveur(guild_id):
+  from .guild import Guild
   r = requests.get(f'{url}/guilds/{guild_id}', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   return Guild(loads(r.content.decode('utf-8')))
@@ -71,13 +73,15 @@ def get_membre(member_id, guild_id):
   content['gid'] = guild_id
   return Member(content)
 
-from .message import Message
+
 def get_message(message_id, channel_id):
+  from .message import Message
   r = requests.get(f'{url}/channels/{channel_id}/messages/{message_id}', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   return Message(loads(r.content.decode('utf-8')))
 
 def get_role(role_id, guild_id):
+  from .role import Role
   r = requests.get(f'{url}/guilds/{guild_id}/roles', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   for role in loads(r.content.decode('utf-8')):
@@ -85,6 +89,7 @@ def get_role(role_id, guild_id):
   raise ValueError('Id Invalide')
 
 def get_emoji(guild_id, emoji_id):
+  from .emojis import Emoji
   r = requests.get(f'{url}/guilds/{guild_id}/emojis/{emoji_id}', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   c = loads(r.content.decode('utf-8'))
@@ -92,11 +97,12 @@ def get_emoji(guild_id, emoji_id):
   return Emoji(c)
 
 def get_sticker(sticker_id):
+  from .stickers import Stickers
   r = requests.get(f'{url}/stickers/{sticker_id}', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   return Stickers(loads(r.content.decode('utf-8')))
-from context import Context
 def messageContext(message):
+  from .context import Context
   return Context(message)
   
 class Member:
@@ -132,6 +138,7 @@ class User:
     self.flags = userinfo['public_flags']
 
 def get_all_roles(guild_id):
+  from .role import Role
   r = requests.get(f'{url}/guilds/{guild_id}/roles', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   listee: list = []
@@ -146,6 +153,7 @@ def get_all_members(guild_id):
   return listee
 
 def get_all_channels(guild_id):
+  from .channels import txt_Channel
   r = requests.get(f'{url}/guilds/{guild_id}/channels', headers={'authorization': 'Bot ' + get_token()})
   errors.status(r.status_code)
   listee: list = []
